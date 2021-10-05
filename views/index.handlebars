@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <link rel="stylesheet" href="/css/registration.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="container">
+
+        <div>
+            <form action="/addReg" method="post">
+                <!-- Reg number heading -->
+                <div class="heading">
+                    <h1>Registration numbers</h1>
+                    <h4 style="font-size: 16px; padding-top: 5px; color: rgba(7, 53, 41, 0.438)">Welcome! Add
+                        registration numbers; select a town and click on show to display.</h4>
+                </div>
+
+                <div class="regs">
+
+                    <div>
+                        <h3 class="erroMsgs"
+                            style="color: brown; font-weight:bold; font-size: 16px; font-family: Arial, Helvetica, sans-serif;">
+                        </h3>
+                        <h3 class="clearMsgs"
+                            style="color: rgb(55, 102, 102); padding-top: -15px; font-weight:bold; font-size: 16px; font-family: Arial, Helvetica, sans-serif;">
+                        </h3>
+                    </div>
+
+                    <div class="Registeration" style="margin-bottom: 20px;">
+                        <!-- Space above text -->
+                        <span class="name_please"></span>
+
+                        <!-- Insert name label -->
+                        <label for="nameInput" style="font-weight: bold; font-size: 18px;">Registration number:</label>
+
+                        <!-- Text box... use pattern to disable numeric input into the textbox-->
+                        <input id="reg" type="text" placeholder="  i.e. CA 123-345  " name="name">
+                    </div>
+
+                    <div class="add">
+                        <!-- Add button -->
+                        <button class="addBtn" type="submit" style="font-size: 15px; margin-bottom: 30px;">ADD</button>
+                    </div>
+
+                </div>
+            </form>
+
+            <form action="/showReg" method="post">
+
+
+                <div class="radioButton">
+                    <div class="towns">
+                        <input class="townBtn" type="radio" name="townBtn" value="CA">
+                        <label for="town">Cape Town</span>
+                    </div>
+
+                    <div class="towns">
+                        <input class="townBtn" type="radio" name="townBtn" value="CJ">
+                        <label for="town">Stellenbosch</span>
+                    </div>
+
+                    <div class="towns">
+                        <input class="townBtn" type="radio" name="townBtn" value="CL">
+                        <label for="town">Paarl</span>
+                    </div>
+
+                    <div class="towns">
+                        <input class="townBtn" type="radio" name="townBtn" value="All">
+                        <label for="town">Display All</span>
+                    </div>
+
+                </div>
+
+                <div class="show">
+                    <!-- Add button -->
+                    <button class="showBtn" type="submit" style="font-size: 15px; margin-bottom: 30px;">SHOW</button>
+
+                    <a href="/clear"><button class="clearBtn" type="button" style="font-size: 15px; margin-bottom: 30px;">CLEAR</button></a>
+                </div>
+
+            </form>
+
+
+        </div>
+        <!-- Output list space -->
+        <ul 
+        id="regList" style="list-style-type: none;"> {{#each regs}}
+        <li>{{this.regnumber}}</li>
+        {{/each}}
+        </ul>
+
+
+
+
+    </div>
+
+</body>
+
+</html>
