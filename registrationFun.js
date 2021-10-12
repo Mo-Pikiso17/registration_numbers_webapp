@@ -29,6 +29,25 @@ module.exports = function registration(pool) {
         return await regD.getAddedReg()
     }
 
+    async function showRegs(id){
+
+        return (await regD.showAddedReg(id)).rows
+
+    }
+
+    async function gettingID(regCode){
+
+        return (await regD.getID(regCode))
+
+    }
+
+    async function checkingRegNum(regCode){
+
+        return (await regD.seekExistance(regCode))
+
+    }
+
+    
     async function resetting(){
         return await regD.reset()
     }
@@ -106,6 +125,9 @@ module.exports = function registration(pool) {
         filterS,
         filterA,
         getRegs,
+        showRegs,
+        gettingID,
+        checkingRegNum,
         resetting
 
     }
