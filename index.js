@@ -6,6 +6,9 @@ const session = require('express-session');
 
 let app = express();
 
+const routes = require('./routes'); //import the routes
+
+
 const exphbs = require('express-handlebars');
 
 const handlebarSetup = exphbs({
@@ -66,194 +69,18 @@ const pool = new Pool({
 
 });
 
-const regFun = require('./registrationFun'); //import the routes
-
-const registerFun = regFun(pool);
-
-
 app.engine('handlebars', handlebarSetup);
 app.set('view engine', 'handlebars');
 
 //routes
-app.get('/', async function (req, res) {
-  var id = req.session.users
-  try {
 
-    if (id) {
+app.use('/', routes);
 
-      var show = await registerFun.showRegs(id)
-      console.log(show.length)
+app.use('/addReg', routes);
 
-      // res.render('index', { regs: show })
+app.use('/showReg', routes);
 
-      // if (true) {
-
-      //   req.session.message = {
-      //     type: 'ERROR!',
-      //     intro: 'Empty field',
-      //     message: 'No Registration Numbers entered for this town!'
-      //   }
-      // }
-      res.render('index', { regs: show })
-
-    } else {
-
-      var regs = await registerFun.getRegs()
-      res.render('index', { regs })
-
-
-    }
-
-  } catch (e) {
-
-    console.log('Catch an error: ', e)
-  }
-
-
-
-});
-
-app.post('/addReg', async function (req, res) {
-  var input = req.body.name
-
-  if (input) {
-
-    var upper = (input[0] + input[1]).toUpperCase()
-    var fullInput = upper
-
-    for (let index = 0; index < input.length; index++) {
-      if (index == 0 || index == 1) {
-      } else {
-
-        fullInput = fullInput + input[index];
-      }
-
-    }
-    console.log(fullInput)
-    var checkingRegs = await registerFun.checkingRegNum(fullInput)
-    // await registerFun.pushRegister(input)
-    req.session.users = null
-
-    try {
-
-      if (checkingRegs.length > 0) {
-
-        req.session.message = {
-          type: 'ERROR!',
-          intro: 'Empty field',
-          message: 'Registration Number Already Exists!'
-        }
-
-        res.redirect('/')
-
-
-      } else {
-
-        await registerFun.pushRegister(fullInput)
-
-        req.session.messages = {
-          types: 'SUCCESS!',
-          intro: 'Empty field',
-          messages: 'Registration number added!'
-        }
-
-        res.redirect('/')
-
-      }
-
-
-    } catch (e) {
-
-      console.log('Catch an error: ', e)
-    }
-
-  } else {
-
-    req.session.message = {
-      type: 'ERROR!',
-      intro: 'Empty field',
-      message: 'Invalid Input!'
-    }
-
-    res.redirect('/')
-
-  }
-
-});
-
-
-app.post('/showReg', async function (req, res) {
-
-  var stored = req.body.townBtn
-
-
-  // try {
-
-
-  if (stored == "All") {
-    // storing id in session, in order to check if it exists- filtering purpose
-    // no id stored and equates to null
-    req.session.users = null
-    var reg = await registerFun.getRegs()
-
-    if (reg.length === 0) {
-
-      req.session.message = {
-        type: 'ERROR!',
-        intro: 'Empty field',
-        message: 'No Registration Numbers entered!'
-      }
-    }
-    res.redirect('/')
-
-  } else {
-    var id = await registerFun.gettingID(stored)
-    // // storing id in session, in order to check if it exists- filtering purpose
-    var userid = id
-
-    req.session.users = userid;
-
-    var show = await registerFun.showRegs(id)
-
-    if (show.length == 0) {
-
-      req.session.message = {
-        type: 'ERROR!',
-        intro: 'Empty field',
-        message: 'No Registration Numbers entered for this town!'
-      }
-    }
-    // console.log(id)
-    res.redirect('/')
-  }
-
-  // } 
-
-  // catch (e) {
-  //   console.log('Catch an error: ', e)
-  // }
-
-});
-
-
-app.get('/clear', async function (req, res) {
-  req.session.userid = null
-
-  try {
-    await registerFun.resetting()
-    req.session.messages = {
-      types: 'SUCCESS!',
-      intro: 'Empty field',
-      messages: 'Page Reloaded!'
-    }
-    res.redirect('/')
-
-  } catch (e) {
-
-    console.log('Catch an error: ', e)
-  }
-});
-
+app.use('/clear', routes);
 
 //start the server
 let PORT = process.env.PORT || 3004;
