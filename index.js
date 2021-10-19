@@ -76,112 +76,162 @@ app.set('view engine', 'handlebars');
 
 //routes
 app.get('/', async function (req, res) {
-  var id = req.session.userid
-
+  var id = req.session.users
   try {
 
     if (id) {
 
       var show = await registerFun.showRegs(id)
-  
-      if (show.length == 0) {
-  
-        req.session.message = {
-          type: 'ERROR!',
-          intro: 'Empty field',
-          message: 'No Registration Numbers entered for this town!'
-        }
-  
-  
-      }
+      console.log(show.length)
+
+      // res.render('index', { regs: show })
+
+      // if (true) {
+
+      //   req.session.message = {
+      //     type: 'ERROR!',
+      //     intro: 'Empty field',
+      //     message: 'No Registration Numbers entered for this town!'
+      //   }
+      // }
       res.render('index', { regs: show })
-  
+
     } else {
-  
+
       var regs = await registerFun.getRegs()
       res.render('index', { regs })
-  
+
+
     }
-  
-    
+
   } catch (e) {
 
     console.log('Catch an error: ', e)
   }
 
-  
+
 
 });
 
 app.post('/addReg', async function (req, res) {
   var input = req.body.name
-  var checkingRegs = await registerFun.checkingRegNum(input)
-  // await registerFun.pushRegister(input)
-  req.session.userid = null
 
-  try {
+  if (input) {
 
-    if (checkingRegs.length > 0) {
+    var upper = (input[0] + input[1]).toUpperCase()
+    var fullInput = upper
 
-      req.session.message = {
-        type: 'ERROR!',
-        intro: 'Empty field',
-        message: 'Registration Number Already Exists!'
+    for (let index = 0; index < input.length; index++) {
+      if (index == 0 || index == 1) {
+      } else {
+
+        fullInput = fullInput + input[index];
       }
-  
-      res.redirect('/')
-  
-  
-    } else {
-  
-      await registerFun.pushRegister(input)
-  
-      req.session.messages = {
-        types: 'SUCCESS!',
-        intro: 'Empty field',
-        messages: 'Registration number added!'
-      }
-  
-      res.redirect('/')
-  
+
     }
-  
-    
-  } catch (e) {
+    console.log(fullInput)
+    var checkingRegs = await registerFun.checkingRegNum(fullInput)
+    // await registerFun.pushRegister(input)
+    req.session.users = null
 
-    console.log('Catch an error: ', e)
+    try {
+
+      if (checkingRegs.length > 0) {
+
+        req.session.message = {
+          type: 'ERROR!',
+          intro: 'Empty field',
+          message: 'Registration Number Already Exists!'
+        }
+
+        res.redirect('/')
+
+
+      } else {
+
+        await registerFun.pushRegister(fullInput)
+
+        req.session.messages = {
+          types: 'SUCCESS!',
+          intro: 'Empty field',
+          messages: 'Registration number added!'
+        }
+
+        res.redirect('/')
+
+      }
+
+
+    } catch (e) {
+
+      console.log('Catch an error: ', e)
+    }
+
+  } else {
+
+    req.session.message = {
+      type: 'ERROR!',
+      intro: 'Empty field',
+      message: 'Invalid Input!'
+    }
+
+    res.redirect('/')
+
   }
 
-  
 });
 
 
 app.post('/showReg', async function (req, res) {
+
   var stored = req.body.townBtn
 
-  try {
 
-    if (stored == "All") {
-      // no id stored and equates to null
-      req.session.userid = null
-      res.redirect('/')
-  
-    }
-  
-    else {
-  
-      var id = await registerFun.gettingID(stored)
-      // storing id in session, in order to check if it exists- filtering purpose
-      req.session.userid = id
-  
-      res.redirect('/')
-  
-    }
-    
-  } catch (e) {
+  // try {
 
-    console.log('Catch an error: ', e)
+
+  if (stored == "All") {
+    // storing id in session, in order to check if it exists- filtering purpose
+    // no id stored and equates to null
+    req.session.users = null
+    var reg = await registerFun.getRegs()
+
+    if (reg.length === 0) {
+
+      req.session.message = {
+        type: 'ERROR!',
+        intro: 'Empty field',
+        message: 'No Registration Numbers entered!'
+      }
+    }
+    res.redirect('/')
+
+  } else {
+    var id = await registerFun.gettingID(stored)
+    // // storing id in session, in order to check if it exists- filtering purpose
+    var userid = id
+
+    req.session.users = userid;
+
+    var show = await registerFun.showRegs(id)
+
+    if (show.length == 0) {
+
+      req.session.message = {
+        type: 'ERROR!',
+        intro: 'Empty field',
+        message: 'No Registration Numbers entered for this town!'
+      }
+    }
+    // console.log(id)
+    res.redirect('/')
   }
+
+  // } 
+
+  // catch (e) {
+  //   console.log('Catch an error: ', e)
+  // }
 
 });
 

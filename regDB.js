@@ -7,12 +7,14 @@ module.exports = function registrationDB(pool) {
     }
 
     async function setData(input, id) {
+        // var nameSecLetterCap = input.toUpperCase();
 
         var check = await pool.query("SELECT regnumber FROM registration_numbers WHERE regnumber = $1", [input])
         if (check.rowCount < 1) {
 
             await pool.query("INSERT INTO registration_numbers (regnumber, parentid) VALUES ($1, $2)", [input, id]);
         }
+
     }
 
     async function getAddedReg(regs){

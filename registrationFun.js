@@ -26,7 +26,7 @@ module.exports = function registration(pool) {
     }
 
     async function getRegs(){
-        return await regD.getAddedReg()
+        return (await regD.getAddedReg())
     }
 
     async function showRegs(id){
