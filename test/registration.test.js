@@ -73,7 +73,7 @@ describe('The basic database registration app', function () {
         await regDatabase.pushRegister("CJ 231-234", 3);
         await regDatabase.pushRegister("CA 231-234", 1);
 
-        var data = await regDatabase.gettingID("CA", 1)
+        var data = await regDatabase.gettingID("CA 231-234")
         assert.equal(1, data.length);
 
     });
