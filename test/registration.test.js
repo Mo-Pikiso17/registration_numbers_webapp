@@ -67,17 +67,21 @@ describe('The basic database registration app', function () {
 
     it('should be able display registration numbers Cape Town', async function () {
 
+        await regDatabase.gettingID("CA");
+
       
         await regDatabase.pushRegister("CA 231-234", 1);
         await regDatabase.pushRegister("CL 231-234", 2);
         await regDatabase.pushRegister("CJ 231-234", 3);
         await regDatabase.pushRegister("CA 231-234", 1);
 
-        var datas = {regCode:"CA", townid:1}
+        // var datas = {regCode:"CA", townid:1}
 
-        var data = await regDatabase.gettingID("CA")
+        var data = await regDatabase.showRegs(1);
 
-        assert.deepEqual(1, data);
+
+
+        assert.deepEqual(1, data.length);
 
     });
 
