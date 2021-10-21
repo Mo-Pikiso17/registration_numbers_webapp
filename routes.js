@@ -45,7 +45,6 @@ router.get('/', async function (req, res) {
         var regs = await registerFun.getRegs()
         res.render('index', { regs })
   
-  
       }
   
     } catch (e) {
@@ -146,10 +145,6 @@ router.get('/', async function (req, res) {
   
     var stored = req.body.townBtn
   
-  
-    // try {
-  
-  
     if (stored == "All") {
       // storing id in session, in order to check if it exists- filtering purpose
       // no id stored and equates to null
@@ -185,12 +180,6 @@ router.get('/', async function (req, res) {
       }
       res.redirect('/')
     }
-  
-    // } 
-  
-    // catch (e) {
-    //   console.log('Catch an error: ', e)
-    // }
   
   });
   

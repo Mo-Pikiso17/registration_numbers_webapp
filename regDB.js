@@ -18,7 +18,6 @@ module.exports = function registrationDB(pool) {
     }
 
     async function setData(input, id) {
-        // var nameSecLetterCap = input.toUpperCase();
 
         var check = await pool.query("SELECT regnumber FROM registration_numbers WHERE regnumber = $1", [input])
         if (check.rowCount < 1) {
