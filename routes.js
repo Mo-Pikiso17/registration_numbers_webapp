@@ -91,11 +91,23 @@ router.get('/', async function (req, res) {
         } else {
   
           await registerFun.pushRegister(fullInput)
-  
-          req.session.messages = {
-            types: 'SUCCESS!',
-            intro: 'Empty field',
-            messages: 'Registration number added!'
+          var con = await registerFun.getCondition()
+          if (con == "not data") {
+
+            req.session.message = {
+              type: 'Invalid Input!',
+              intro: 'Empty field',
+              message: 'Please add a valid registration number i.e CA 123-123 or CJ 123-123 or CL 123-123!'
+            }
+            
+          } else {
+
+            req.session.messages = {
+              types: 'SUCCESS!',
+              intro: 'Empty field',
+              messages: 'Registration number added!'
+            }
+            
           }
   
           res.redirect('/')
@@ -104,6 +116,13 @@ router.get('/', async function (req, res) {
   
   
       } catch (e) {
+
+        req.session.message = {
+          type: 'Invalid Input!',
+          intro: 'Empty field',
+          message: 'Please add a valid registration number i.e CA 123-123 or CJ 123-123 or CL 123-123!'
+        }
+        res.redirect('/')
   
         console.log('Catch an error: ', e)
       }

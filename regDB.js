@@ -3,7 +3,18 @@ module.exports = function registrationDB(pool) {
     async function getID(input) {
         var startOfInput = input[0] + input[1]
         var id = await pool.query("SELECT * FROM towns WHERE regCode = $1", [startOfInput]);
-        return await id.rows[0].townid
+        var data = await id.rows
+
+        try {
+            // console.log(data)
+            return data[0].townid
+
+        } catch (error) {
+
+            // console.log(error)
+            return "not data"
+        }
+
     }
 
     async function setData(input, id) {

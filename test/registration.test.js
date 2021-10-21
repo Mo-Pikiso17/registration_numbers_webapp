@@ -43,44 +43,45 @@ describe('The basic database registration app', function () {
 
     it('should be able display registration numbers for Paarl', async function () {
 
-        await regDatabase.pushRegister("CA 231-234", 1);
-        await regDatabase.pushRegister("CL 231-234", 2);
-        await regDatabase.pushRegister("CJ 231-234", 3);
-        await regDatabase.pushRegister("CA 231-234", 1);
+        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CL 231-234");
+        await regDatabase.pushRegister("CJ 231-234");
+        await regDatabase.pushRegister("CA 231-234");
 
-        var data = await regDatabase.gettingID("CL", 2)
+        var id = await regDatabase.gettingID("CL")
+        var data = await regDatabase.showRegs(id)
+
         assert.equal(1, data.length);
 
     });
 
     it('should be able display registration numbers Stellenbosch', async function () {
 
-        await regDatabase.pushRegister("CA 231-234", 1);
-        await regDatabase.pushRegister("CL 231-234", 2);
-        await regDatabase.pushRegister("CJ 231-234", 3);
-        await regDatabase.pushRegister("CA 231-234", 1);
+        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CL 231-234");
+        await regDatabase.pushRegister("CJ 231-234");
+        await regDatabase.pushRegister("CJ 231-236");
+        await regDatabase.pushRegister("CJ 231-235");
+        await regDatabase.pushRegister("CA 231-234");
 
-        var data = await regDatabase.gettingID("CJ", 3)
-        assert.equal(1, data.length);
+        var id = await regDatabase.gettingID("CJ")
+        var data = await regDatabase.showRegs(id)
+
+        assert.equal(3, data.length);
 
     });
 
     it('should be able display registration numbers Cape Town', async function () {
 
-        await regDatabase.gettingID("CA", 1);
-        // await regDatabase.gettingID("CL", 2);
-        // await regDatabase.gettingID("CJ", 3);
+        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CL 231-234");
+        await regDatabase.pushRegister("CJ 231-234");
+        await regDatabase.pushRegister("CA 231-235");
 
-        await regDatabase.pushRegister("CA 231-234", 1);
-        await regDatabase.pushRegister("CL 231-234", 2);
-        await regDatabase.pushRegister("CJ 231-234", 3);
-        await regDatabase.pushRegister("CA 231-234", 1);
+        var id = await regDatabase.gettingID("CA")
+        var data = await regDatabase.showRegs(id)
 
-        // var datas = {regCode:"CA", townid:1}
-
-        var data = await regDatabase.showRegs(1);
-
-        assert.deepEqual(1, data.length);
+        assert.equal(2, data.length);
 
     });
 
@@ -89,10 +90,10 @@ describe('The basic database registration app', function () {
     it('should not duplicate registration numbers input', async function () {
 
        
-        await regDatabase.pushRegister("CA 231-234", 1);
-        await regDatabase.pushRegister("CL 231-234", 2);
-        await regDatabase.pushRegister("CJ 231-234", 3);
-        await regDatabase.pushRegister("CA 231-234", 1);
+        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CL 231-234");
+        await regDatabase.pushRegister("CJ 231-234");
+        await regDatabase.pushRegister("CA 231-234");
 
         var data = await regDatabase.getRegs()
         assert.equal(3, data.length);
@@ -103,10 +104,10 @@ describe('The basic database registration app', function () {
 
         // input into database
        
-        await regDatabase.pushRegister("CA 231-234", 1);
-        await regDatabase.pushRegister("CL 231-234", 2);
-        await regDatabase.pushRegister("CJ 231-234", 3);
-        await regDatabase.pushRegister("CA 231-234", 1);
+        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CL 231-234");
+        await regDatabase.pushRegister("CJ 231-234");
+        await regDatabase.pushRegister("CA 231-234");
 
         // clearing my database
         await regDatabase.resetting();
@@ -122,7 +123,7 @@ describe('The basic database registration app', function () {
 
     it('should return a registration number using the database', async function () {
 
-        await regDatabase.pushRegister("CA 123-123", 1);
+        await regDatabase.pushRegister("CA 123-123");
 
         var data = "CA 123-123"
         

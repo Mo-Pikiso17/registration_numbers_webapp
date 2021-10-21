@@ -4,7 +4,7 @@ const registerDB = require('./regDB');
 module.exports = function registration(pool) {
 
     const regD = registerDB(pool);
-
+    var condition;
 
     var pattern = /^[A-Z]{2}\s[0-9]{3}-[0-9]{3}$/
 
@@ -15,14 +15,24 @@ module.exports = function registration(pool) {
 
         if (validate){
            var id = await regD.getID(input)
+            if (id !== "not data") {
+                
+                await regD.setData(input, id)
+                condition = " "
+            }else{
 
-           await regD.setData(input, id)
+                condition = "not data"
+            }
 
         }else{
 
             return "please a valid registration number"
         }
 
+    }
+
+    async function getCondition(){
+         return condition
     }
 
     async function getRegs(){
@@ -128,6 +138,7 @@ module.exports = function registration(pool) {
         showRegs,
         gettingID,
         checkingRegNum,
+        getCondition,
         resetting
 
     }
