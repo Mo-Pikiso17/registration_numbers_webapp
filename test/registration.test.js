@@ -31,10 +31,10 @@ describe('The basic database registration app', function () {
     
     it('should be able to set registration numbers into Database', async function () {
 
-        await regDatabase.pushRegister("CA 231-234", 1);
-        await regDatabase.pushRegister("CL 231-234", 2);
-        await regDatabase.pushRegister("CJ 231-234", 3);
-        await regDatabase.pushRegister("CA 231-234", 1);
+        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CL 231-234");
+        await regDatabase.pushRegister("CJ 231-234");
+        await regDatabase.pushRegister("CA 231-234");
 
         var data = await regDatabase.getRegs()
         assert.equal(3, data.length);
