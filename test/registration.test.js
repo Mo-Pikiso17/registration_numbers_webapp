@@ -28,7 +28,7 @@ describe('The basic database registration app', function () {
         // await pool.query("delete from categories;");
     });
 
-    
+
     it('should be able to set registration numbers into Database', async function () {
 
         await regDatabase.pushRegister("CA 231-234");
@@ -46,12 +46,20 @@ describe('The basic database registration app', function () {
         await regDatabase.pushRegister("CA 231-234");
         await regDatabase.pushRegister("CL 231-234");
         await regDatabase.pushRegister("CJ 231-234");
-        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CA 231-235");
+
+
+        var datas = [
+            {
+                parentid: 2,
+                regnumber: "CL 231-234"
+            },
+        ]
 
         var id = await regDatabase.gettingID("CL")
         var data = await regDatabase.showRegs(id)
 
-        assert.equal(1, data.length);
+        assert.deepEqual(datas, data);
 
     });
 
@@ -64,10 +72,31 @@ describe('The basic database registration app', function () {
         await regDatabase.pushRegister("CJ 231-235");
         await regDatabase.pushRegister("CA 231-234");
 
+
+
+        var datas = [
+            {
+                parentid: 3,
+
+                regnumber: "CJ 231-234"
+            },
+            {
+                parentid: 3,
+
+                regnumber: "CJ 231-236"
+            },
+            {
+                parentid: 3,
+
+                regnumber: "CJ 231-235"
+            }
+        ]
+
+
         var id = await regDatabase.gettingID("CJ")
         var data = await regDatabase.showRegs(id)
 
-        assert.equal(3, data.length);
+        assert.deepEqual(datas, data);
 
     });
 
@@ -78,10 +107,23 @@ describe('The basic database registration app', function () {
         await regDatabase.pushRegister("CJ 231-234");
         await regDatabase.pushRegister("CA 231-235");
 
+        var datas = [
+            {
+                parentid: 1,
+
+                regnumber: 'CA 231-234'
+            },
+            {
+                parentid: 1,
+
+                regnumber: 'CA 231-235'
+            }
+        ]
+
         var id = await regDatabase.gettingID("CA")
         var data = await regDatabase.showRegs(id)
 
-        assert.equal(2, data.length);
+        assert.deepEqual(datas, data);
 
     });
 
@@ -89,7 +131,7 @@ describe('The basic database registration app', function () {
 
     it('should not duplicate registration numbers input', async function () {
 
-       
+
         await regDatabase.pushRegister("CA 231-234");
         await regDatabase.pushRegister("CL 231-234");
         await regDatabase.pushRegister("CJ 231-234");
@@ -100,10 +142,24 @@ describe('The basic database registration app', function () {
 
     });
 
+    it('should check registration numbers input exits', async function () {
+
+        await regDatabase.pushRegister("CA 231-234");
+        await regDatabase.pushRegister("CL 231-234");
+        await regDatabase.pushRegister("CJ 231-234");
+        await regDatabase.pushRegister("CA 231-234");
+
+        var datas = [{regnumber: "CA 231-234"}]
+
+        var data = await regDatabase.checkingRegNum("CA 231-234")
+        assert.deepEqual(datas, data);
+
+    });
+
     it('should clear data in database', async function () {
 
         // input into database
-       
+
         await regDatabase.pushRegister("CA 231-234");
         await regDatabase.pushRegister("CL 231-234");
         await regDatabase.pushRegister("CJ 231-234");
@@ -126,7 +182,7 @@ describe('The basic database registration app', function () {
         await regDatabase.pushRegister("CA 123-123");
 
         var data = "CA 123-123"
-        
+
 
         let categories = await regDatabase.showRegs(1)
         var msg = categories.rows

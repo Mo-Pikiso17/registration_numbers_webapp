@@ -27,7 +27,7 @@ module.exports = function registrationDB(pool) {
 
     }
 
-    async function getAddedReg(regs){
+    async function getAddedReg(){
 
         var regs = await pool.query("SELECT * FROM registration_numbers")
 
@@ -39,7 +39,7 @@ module.exports = function registrationDB(pool) {
     async function showAddedReg(inputID){
 
        // The actual registration number with respect to town name
-        return await pool.query("SELECT * FROM registration_numbers WHERE parentid = $1", [inputID])
+        return await pool.query("SELECT regnumber, parentid FROM registration_numbers WHERE parentid = $1", [inputID])
     
     }
 
